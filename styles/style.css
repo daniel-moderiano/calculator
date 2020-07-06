@@ -1,3 +1,5 @@
+
+
 .main-container {
     height: 500px;
     width: 350px;
@@ -7,6 +9,7 @@
     display: flex;
     flex-direction: column;
     padding: 0.2rem;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .screen-container {
@@ -19,10 +22,26 @@
 }
 
 .screen {
-    border: 1px solid blue;
+    border: 1px solid gray;
     width: 350px;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+}
 
+.screen__display {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+}
+
+.screen__content--bottom {
+    font-size: 3rem;
+    padding-right: 0.5rem;
 }
 
 
@@ -41,8 +60,8 @@
     height: 75%;
 }
 
-.button {
-    border: 1px solid black;
+button {
+    border: 1px solid grey;
 }
 
 .button--one {
