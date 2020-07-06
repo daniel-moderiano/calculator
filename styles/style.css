@@ -1,0 +1,120 @@
+.main-container {
+    height: 500px;
+    width: 350px;
+    margin: 0 auto;
+    margin-top: 3rem;
+    border: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    padding: 0.2rem;
+}
+
+.screen-container {
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.2rem;
+
+}
+
+.screen {
+    border: 1px solid blue;
+    width: 350px;
+    height: 100%;
+
+}
+
+
+.buttons-container {
+
+    display: grid;
+    grid-gap: 0.2rem;
+    
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: "clear back  divide  multiply"
+                         "seven eight nine    subtract"
+                         "four  five  six     add"
+                         "one   two   three   equals"   
+                         "zer  zer  decimal equals";
+    height: 75%;
+}
+
+.button {
+    border: 1px solid black;
+}
+
+.button--one {
+    grid-area: one;
+}
+
+.button--two {
+    grid-area: two;
+}
+
+.button--three {
+    grid-area: three;
+}
+
+.button--four {
+    grid-area: four;
+}
+
+.button--five {
+    grid-area: five;
+}
+
+.button--six {
+    grid-area: six;
+}
+
+.button--seven {
+    grid-area: seven;
+}
+
+.button--eight {
+    grid-area: eight;
+}
+
+.button--nine {
+    grid-area: nine;
+}
+
+.button--zero {
+    grid-area: zer;
+}
+
+.button--equals {
+    grid-area: equals;
+
+}
+
+.button--add {
+    grid-area: "add";
+}
+
+.button--subtract {
+    grid-area: "subtract";
+}
+
+.button--backspace {
+    grid-area: back;
+}
+
+.button--clear {
+    grid-area: clear;
+}
+
+.button--decimal {
+    grid-area: "decimal";
+}
+
+.button--divide {
+    grid-area: divide;
+}
+
+.button--multiply {
+    grid-area: "multiply";
+}
+
