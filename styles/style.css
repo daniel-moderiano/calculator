@@ -1,5 +1,3 @@
-
-
 .main-container {
     height: 500px;
     width: 350px;
@@ -44,6 +42,12 @@
     padding-right: 0.5rem;
 }
 
+.screen__content--top {
+    color: rgb(116, 116, 116);
+    font-size: 1.25rem;
+    padding-right: 0.5rem;
+}
+
 
 .buttons-container {
 
@@ -62,6 +66,7 @@
 
 button {
     border: 1px solid grey;
+    font-size: 1.5rem;
 }
 
 .button--one {
