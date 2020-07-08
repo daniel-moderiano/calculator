@@ -135,6 +135,7 @@ function operatorClick(btn) {
 
 // Make sure to store the on-screen operand in the storedOperands array prior to evaluation of arithmetic (note this is a tentative implementation, and in fact we could avoid adding this to stored and simply utilise the currentOperand variable).
 
+// TODO: Need to apply this logic correctly to subtract and divide. Works well with multiply and addition
 
 function equals() {
     if(currentOperand === undefined && currentOperator === undefined) {
@@ -146,14 +147,9 @@ function equals() {
     //     currentOperand = screenBottom.textContent;
     //     result = operate(currentOperator, runningResult, currentOperand);
     //     screenTop.textContent += `${currentOperand} = `;
-    } else if(currentOperand === undefined && currentOperator != undefined) {
+    } else if((currentOperand === undefined && currentOperator != undefined) || equalsPressed === true) {
         result = operate(currentOperator, runningResult, parseInt(screenBottom.textContent));
-        screenTop.textContent = `${result - runningResult} ${currentOperator} ${runningResult} = `;
-    
-    // } else if(currentOperand === undefined) {
-    //     currentOperand = screenBottom.textContent;
-    //     result = operate(currentOperator, runningResult, currentOperand);
-    //     screenTop.textContent += `${currentOperand} = `;
+        screenTop.textContent = `${result} ${currentOperator} ${runningResult} = `;
     } else {
         result = operate(currentOperator, runningResult, currentOperand);
         screenTop.textContent += `${currentOperand} = `;
