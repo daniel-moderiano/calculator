@@ -2,16 +2,16 @@
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
 
 const operatorFunctions = {
-    add : function(a, b) {
+    "+" : function(a, b) {
         return a + b;
     },
-    subtract : function(a, b) {
+    "-" : function(a, b) {
         return a - b;
     },
-    multiply : function(a, b) {
+    'x' : function(a, b) {
         return a * b;
     },
-    divide : function(a, b) {
+    "/" : function(a, b) {
         return a / b;
     }
 };
@@ -37,6 +37,7 @@ let currentOperand;
 let currentOperator;
 let storedOperands = []
 let storedOperators = []
+let runningResult = undefined;
 
 screenBottom.textContent = "0";
 
@@ -69,6 +70,9 @@ clearBtn.addEventListener("click", () => {
 // On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. In addition, add the current operator and operand to the ongoing array of stored operands and operators for later function use. Display operand and operator in dim grey screen top
 
 function addition() {
+    if(runningResult === undefined) {
+        runningResult = parseInt(screenBottom.textContent);
+    }
     storedOperands.push(parseInt(screenBottom.textContent));
     storedOperators.push(addBtn.textContent);
     currentOperator = addBtn.textContent
@@ -82,6 +86,8 @@ addBtn.addEventListener("click", addition);
 
 function equals() {
     storedOperands.push(parseInt(screenBottom.textContent));
+    screenTop.textContent += `${currentOperand} = `;
+    screenBottom.textContent = operate(currentOperator, runningResult, currentOperand);
 }
 
 equalsBtn.addEventListener("click", equals);
