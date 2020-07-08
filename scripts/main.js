@@ -32,6 +32,7 @@ const screenTop = document.querySelector(".screen__content--top");
 const clearBtn = document.querySelector(".button--clear");
 const addBtn = document.querySelector(".button--add");
 const equalsBtn = document.querySelector(".button--equals");
+const operatorButtons = document.querySelectorAll(".button--operator");
 
 let currentOperand;
 let currentOperator;
@@ -63,24 +64,35 @@ clearBtn.addEventListener("click", () => {
     screenTop.textContent = ""
     currentOperator = undefined;
     currentOperand = undefined;
+    runningResult = undefined;
     storedOperands = [];
     storedOperators = [];
 });
 
 // On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. In addition, add the current operator and operand to the ongoing array of stored operands and operators for later function use. Display operand and operator in dim grey screen top
 
-function addition() {
+operatorButtons.forEach(function(btn) {
+    btn.addEventListener("click", () => {
+        operatorClick(btn);       
+    });
+});
+
+
+function operatorClick(btn) {
     if(runningResult === undefined) {
         runningResult = parseInt(screenBottom.textContent);
+    } else {
+        runningResult = operate(currentOperator, runningResult, currentOperand);
+        screenBottom.textContent = runningResult;
     }
     storedOperands.push(parseInt(screenBottom.textContent));
-    storedOperators.push(addBtn.textContent);
-    currentOperator = addBtn.textContent
+    storedOperators.push(btn.textContent);
+    currentOperator = btn.textContent
     screenTop.textContent += `${currentOperand} ${currentOperator} `;
     currentOperand = undefined;
 }
 
-addBtn.addEventListener("click", addition);
+// addBtn.addEventListener("click", addition);
 
 // Make sure to store the on-screen operand in the storedOperands array prior to evaluation of arithmetic (note this is a tentative implementation, and in fact we could avoid adding this to stored and simply utilise the currentOperand variable).
 
