@@ -1,5 +1,6 @@
 // TODO: handle equals press immediately after operator press
-// TODO: handle equals press with no current operator
+// TODO: handle decimal input 
+// TODO: add keyboard functionality
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -131,6 +132,11 @@ function undefinedOperatorEquals() {
 function equals() {
     if(currentOperator === undefined) {
         screenTop.textContent = `${currentOperand} = `;
+    } else if(currentOperand === undefined) {
+        currentOperand = parseInt(screenBottom.textContent);
+        runningResult = operate(currentOperator, runningResult, currentOperand);
+        screenBottom.textContent = runningResult;
+        screenTop.textContent = `${currentOperand} ${currentOperator} ${currentOperand} = `;   
     } else {
         if(equalsPressed === false) {
             screenTop.textContent += `${currentOperand} = `;
@@ -141,7 +147,6 @@ function equals() {
             screenTop.textContent = `${runningResult} ${currentOperator} ${currentOperand} = `;
             runningResult = operate(currentOperator, runningResult, currentOperand);
             screenBottom.textContent = runningResult;
-    
         }   
     }    
     equalsPressed = true; 
