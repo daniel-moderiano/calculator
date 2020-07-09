@@ -43,7 +43,11 @@
 }
 
 .screen__content--shrink {
-    font-size: 2rem;
+    font-size: 1.75rem;
+}
+
+.screen__content--extra-shrink {
+    font-size: 1.5rem;
 }
 
 .screen__content--top {

@@ -1,8 +1,7 @@
-// TODO: handle the pressing of equals after inputting a + b = (currently produces a + b = b = b = etc)
-// TODO: handle the overflow of recurring decimals
-// TODO: handle the keyboard input
-// TODO: Add backspace functionality
-// TODO: add decimal/float support in arithmetic
+// TODO: handle operator press without operands (consider negative numbers)
+// TODO: handle consecutive operator press
+// TODO: handle decimal input 
+// TODO: add keyboard functionality
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -42,19 +41,29 @@ const clearBtn = document.querySelector(".button--clear");
 const addBtn = document.querySelector(".button--add");
 const equalsBtn = document.querySelector(".button--equals");
 const operatorButtons = document.querySelectorAll(".button--operator");
+const allButtons = document.querySelectorAll("button");
 
 let currentOperand;
 let currentOperator;
-let runningResult;;
-let result;
+let runningResult;
 let equalsPressed = false;
 
 screenBottom.textContent = "0";
 
-// Function to reset text size for all inputs in case the user decides to divide by zero
+// Function to return text size to normal after any kind of shift, and adjust text size for high or low long numbers
 
 function resetTextSize() {
     screenBottom.classList.remove("screen__content--shrink");
+    screenBottom.classList.remove("screen__content--extra-shrink");
+}
+
+function overflowHandling() {
+    if(screenBottom.textContent.length >= 12) {
+        screenBottom.classList.add("screen__content--shrink");
+        if(screenBottom.textContent.length > 20) {
+            screenBottom.classList.add("screen__content--extra-shrink");
+        }
+    }
 }
 
 
@@ -62,7 +71,7 @@ function resetTextSize() {
 
 numButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
-        resetTextSize();
+        equalsPressed = false;
         if(screenBottom.textContent === "0" || currentOperand === undefined) {
             screenBottom.textContent = btn.textContent;
         } else if(result != undefined) {
@@ -88,86 +97,79 @@ clearBtn.addEventListener("click", () => {
     currentOperator = undefined;
     currentOperand = undefined;
     runningResult = undefined;
-    result = undefined;
+    equalsPressed = false;
+    resetTextSize();
 });
 
-
-
-// On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. In addition, add the current operator and operand to the ongoing array of stored operands and operators for later function use. Display operand and operator in dim grey screen top
+// On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. Display operand and operator in dim grey screen top
 
 operatorButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
-        resetTextSize();
-        if(result != undefined) {
-            currentOperand = result;
-            currentOperator = btn.textContent;
-            screenTop.textContent = `${currentOperand} ${currentOperator} `;
-            runningResult = result;
-            result = undefined;
-            currentOperand = undefined;
-
+        if(currentOperand === undefined) {
+            // pass
         } else {
-            operatorClick(btn);    
-        }
-           
+            operatorClick(btn);
+            equalsPressed = false; 
+        }     
     });
 });
 
 
 function operatorClick(btn) {
-    if(runningResult === undefined) {
-        runningResult = parseInt(screenBottom.textContent);
+    if(equalsPressed === true) {
+        currentOperand = undefined;
+        currentOperator = btn.textContent;
+        screenTop.textContent = `${runningResult} ${currentOperator} `
     } else {
-        runningResult = operate(currentOperator, runningResult, currentOperand);
-        if(runningResult === "Cannot divide by zero") {
-            screenBottom.classList.add("screen__content--shrink");
-            screenBottom.textContent = runningResult;
+        // If this is the first operator then start the runningResult, else simply compute the updated runningResult and update screen displays accordingly. 
+        if(runningResult === undefined) {
+            runningResult = parseInt(screenBottom.textContent);
         } else {
+            runningResult = operate(currentOperator, runningResult, currentOperand);
             screenBottom.textContent = runningResult;
         }
+        currentOperator = btn.textContent
+        screenTop.textContent += `${currentOperand} ${currentOperator} `;
+        currentOperand = undefined;
     }
-    currentOperator = btn.textContent
-    screenTop.textContent += `${currentOperand} ${currentOperator} `;
-    currentOperand = undefined;
 }
 
 // addBtn.addEventListener("click", addition);
 
 // Make sure to store the on-screen operand in the storedOperands array prior to evaluation of arithmetic (note this is a tentative implementation, and in fact we could avoid adding this to stored and simply utilise the currentOperand variable).
 
-// TODO: Need to apply this logic correctly to subtract and divide. Works well with multiply and addition
+function undefinedOperatorEquals() {
+    
+}
 
 function equals() {
-    if(currentOperand === undefined && currentOperator === undefined) {
-        result = 0;
-    } else if(currentOperator === undefined && currentOperand != undefined) {
-        result = currentOperand;
+    if(currentOperator === undefined) {
         screenTop.textContent = `${currentOperand} = `;
-    // } else if(currentOperand === undefined) {
-    //     currentOperand = screenBottom.textContent;
-    //     result = operate(currentOperator, runningResult, currentOperand);
-    //     screenTop.textContent += `${currentOperand} = `;
-    } else if((currentOperand === undefined && currentOperator != undefined) || equalsPressed === true) {
-        result = operate(currentOperator, runningResult, parseInt(screenBottom.textContent));
-        screenTop.textContent = `${result} ${currentOperator} ${runningResult} = `;
+    } else if(currentOperand === undefined) {
+        currentOperand = parseInt(screenBottom.textContent);
+        runningResult = operate(currentOperator, runningResult, currentOperand);
+        screenBottom.textContent = runningResult;
+        screenTop.textContent = `${currentOperand} ${currentOperator} ${currentOperand} = `;   
     } else {
-        result = operate(currentOperator, runningResult, currentOperand);
-        screenTop.textContent += `${currentOperand} = `;
-    }
-
-    if(result === "Cannot divide by zero") {
-        screenBottom.classList.add("screen__content--shrink");
-        screenBottom.textContent = result;
-    } else {
-        screenBottom.textContent = result;
-    }
-
-    equalsPressed = true;
-    
-    // currentOperand = undefined;
-    // currentOperator = undefined;
+        if(equalsPressed === false) {
+            screenTop.textContent += `${currentOperand} = `;
+            runningResult = operate(currentOperator, runningResult, currentOperand);
+            screenBottom.textContent = runningResult;
+       
+        } else {
+            screenTop.textContent = `${runningResult} ${currentOperator} ${currentOperand} = `;
+            runningResult = operate(currentOperator, runningResult, currentOperand);
+            screenBottom.textContent = runningResult;
+        }   
+    }    
+    equalsPressed = true; 
 }
 
 equalsBtn.addEventListener("click", equals);
 
+// General function to address large numbers
+
+allButtons.forEach(function(btn) {
+    btn.addEventListener("click", overflowHandling);
+});
 
