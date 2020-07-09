@@ -36,9 +36,8 @@ const operatorButtons = document.querySelectorAll(".button--operator");
 
 let currentOperand;
 let currentOperator;
-let storedOperands = []
-let storedOperators = []
-let runningResult = undefined;
+let runningResult;
+let equalsPressed = false;
 
 screenBottom.textContent = "0";
 
@@ -65,8 +64,6 @@ clearBtn.addEventListener("click", () => {
     currentOperator = undefined;
     currentOperand = undefined;
     runningResult = undefined;
-    storedOperands = [];
-    storedOperators = [];
 });
 
 // On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. In addition, add the current operator and operand to the ongoing array of stored operands and operators for later function use. Display operand and operator in dim grey screen top
@@ -85,8 +82,6 @@ function operatorClick(btn) {
         runningResult = operate(currentOperator, runningResult, currentOperand);
         screenBottom.textContent = runningResult;
     }
-    storedOperands.push(parseInt(screenBottom.textContent));
-    storedOperators.push(btn.textContent);
     currentOperator = btn.textContent
     screenTop.textContent += `${currentOperand} ${currentOperator} `;
     currentOperand = undefined;
@@ -97,11 +92,13 @@ function operatorClick(btn) {
 // Make sure to store the on-screen operand in the storedOperands array prior to evaluation of arithmetic (note this is a tentative implementation, and in fact we could avoid adding this to stored and simply utilise the currentOperand variable).
 
 function equals() {
-    storedOperands.push(parseInt(screenBottom.textContent));
     screenTop.textContent += `${currentOperand} = `;
-    screenBottom.textContent = operate(currentOperator, runningResult, currentOperand);
+    runningResult = operate(currentOperator, runningResult, currentOperand);
+    screenBottom.textContent = runningResult;
+    equalsPressed = true;
 }
 
 equalsBtn.addEventListener("click", equals);
 
+// On second equals press, calculate newResult = operate(currentOperator, RunningResult, current operand)
 
