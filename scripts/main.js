@@ -1,4 +1,5 @@
-// TODO: handle equals press immediately after operator press
+// TODO: handle operator press without operands (consider negative numbers)
+// TODO: handle consecutive operator press
 // TODO: handle decimal input 
 // TODO: add keyboard functionality
 
@@ -96,8 +97,12 @@ clearBtn.addEventListener("click", () => {
 
 operatorButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
-        operatorClick(btn);
-        equalsPressed = false;       
+        if(currentOperand === undefined) {
+            // pass
+        } else {
+            operatorClick(btn);
+            equalsPressed = false; 
+        }     
     });
 });
 
