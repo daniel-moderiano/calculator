@@ -1,3 +1,6 @@
+// TODO: handle equals press immediately after operator press
+// TODO: handle operator press immediately after equals press
+
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
 
@@ -88,7 +91,7 @@ clearBtn.addEventListener("click", () => {
     resetTextSize();
 });
 
-// On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. In addition, add the current operator and operand to the ongoing array of stored operands and operators for later function use. Display operand and operator in dim grey screen top
+// On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. Display operand and operator in dim grey screen top
 
 operatorButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
@@ -99,15 +102,22 @@ operatorButtons.forEach(function(btn) {
 
 
 function operatorClick(btn) {
-    if(runningResult === undefined) {
-        runningResult = parseInt(screenBottom.textContent);
+    if(equalsPressed === true) {
+        currentOperand = undefined;
+        currentOperator = btn.textContent;
+        screenTop.textContent = `${runningResult} ${currentOperator} `
     } else {
-        runningResult = operate(currentOperator, runningResult, currentOperand);
-        screenBottom.textContent = runningResult;
+        // If this is the first operator then start the runningResult, else simply compute the updated runningResult and update screen displays accordingly. 
+        if(runningResult === undefined) {
+            runningResult = parseInt(screenBottom.textContent);
+        } else {
+            runningResult = operate(currentOperator, runningResult, currentOperand);
+            screenBottom.textContent = runningResult;
+        }
+        currentOperator = btn.textContent
+        screenTop.textContent += `${currentOperand} ${currentOperator} `;
+        currentOperand = undefined;
     }
-    currentOperator = btn.textContent
-    screenTop.textContent += `${currentOperand} ${currentOperator} `;
-    currentOperand = undefined;
 }
 
 // addBtn.addEventListener("click", addition);
