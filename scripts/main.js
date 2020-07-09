@@ -19,6 +19,9 @@ const operatorFunctions = {
 // Function operate that accepts 3 parameters: operator, and 2 operands. It then performs the arithmetic using the operands and the operator. 
 
 function operate(operand, a, b) {
+    if(operand === "/" && b === 0) {
+        return "Cannot divide by zero";
+    }
     return operatorFunctions[operand](a, b);
 }
 
@@ -33,6 +36,7 @@ const clearBtn = document.querySelector(".button--clear");
 const addBtn = document.querySelector(".button--add");
 const equalsBtn = document.querySelector(".button--equals");
 const operatorButtons = document.querySelectorAll(".button--operator");
+const allButtons = document.querySelectorAll("button");
 
 let currentOperand;
 let currentOperator;
@@ -41,6 +45,21 @@ let equalsPressed = false;
 
 screenBottom.textContent = "0";
 
+// Function to return text size to normal after any kind of shift, and adjust text size for high or low long numbers
+
+function resetTextSize() {
+    screenBottom.classList.remove("screen__content--shrink");
+    screenBottom.classList.remove("screen__content--extra-shrink");
+}
+
+function overflowHandling() {
+    if(screenBottom.textContent.length >= 12) {
+        screenBottom.classList.add("screen__content--shrink");
+        if(screenBottom.textContent.length > 20) {
+            screenBottom.classList.add("screen__content--extra-shrink");
+        }
+    }
+}
 
 
 // Add event listener to numbered buttons to update screen with textContent equal to the button value
@@ -66,6 +85,7 @@ clearBtn.addEventListener("click", () => {
     currentOperand = undefined;
     runningResult = undefined;
     equalsPressed = false;
+    resetTextSize();
 });
 
 // On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. In addition, add the current operator and operand to the ongoing array of stored operands and operators for later function use. Display operand and operator in dim grey screen top
@@ -104,11 +124,14 @@ function equals() {
         screenTop.textContent = `${runningResult} ${currentOperator} ${currentOperand} = `;
         runningResult = operate(currentOperator, runningResult, currentOperand);
         screenBottom.textContent = runningResult;
-    }
-    
+        equalsPressed = true;
+    }    
 }
 
 equalsBtn.addEventListener("click", equals);
 
-// On second equals press, calculate newResult = operate(currentOperator, RunningResult, current operand)
+// General function to address large numbers
 
+allButtons.forEach(function(btn) {
+    btn.addEventListener("click", overflowHandling);
+});
