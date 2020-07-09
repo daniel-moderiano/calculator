@@ -1,5 +1,5 @@
 // TODO: handle equals press immediately after operator press
-// TODO: handle operator press immediately after equals press
+// TODO: handle equals press with no current operator
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -124,18 +124,27 @@ function operatorClick(btn) {
 
 // Make sure to store the on-screen operand in the storedOperands array prior to evaluation of arithmetic (note this is a tentative implementation, and in fact we could avoid adding this to stored and simply utilise the currentOperand variable).
 
+function undefinedOperatorEquals() {
+    
+}
+
 function equals() {
-    if(equalsPressed === false) {
-        screenTop.textContent += `${currentOperand} = `;
-        runningResult = operate(currentOperator, runningResult, currentOperand);
-        screenBottom.textContent = runningResult;
-        equalsPressed = true;
+    if(currentOperator === undefined) {
+        screenTop.textContent = `${currentOperand} = `;
     } else {
-        screenTop.textContent = `${runningResult} ${currentOperator} ${currentOperand} = `;
-        runningResult = operate(currentOperator, runningResult, currentOperand);
-        screenBottom.textContent = runningResult;
-        equalsPressed = true;
+        if(equalsPressed === false) {
+            screenTop.textContent += `${currentOperand} = `;
+            runningResult = operate(currentOperator, runningResult, currentOperand);
+            screenBottom.textContent = runningResult;
+       
+        } else {
+            screenTop.textContent = `${runningResult} ${currentOperator} ${currentOperand} = `;
+            runningResult = operate(currentOperator, runningResult, currentOperand);
+            screenBottom.textContent = runningResult;
+    
+        }   
     }    
+    equalsPressed = true; 
 }
 
 equalsBtn.addEventListener("click", equals);
