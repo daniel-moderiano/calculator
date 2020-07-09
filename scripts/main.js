@@ -47,6 +47,7 @@ screenBottom.textContent = "0";
 
 numButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
+        equalsPressed = false;
         if(screenBottom.textContent === "0" || currentOperand === undefined) {
             screenBottom.textContent = btn.textContent;
         } else {
@@ -64,13 +65,15 @@ clearBtn.addEventListener("click", () => {
     currentOperator = undefined;
     currentOperand = undefined;
     runningResult = undefined;
+    equalsPressed = false;
 });
 
 // On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. In addition, add the current operator and operand to the ongoing array of stored operands and operators for later function use. Display operand and operator in dim grey screen top
 
 operatorButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
-        operatorClick(btn);       
+        operatorClick(btn);
+        equalsPressed = false;       
     });
 });
 
@@ -92,10 +95,17 @@ function operatorClick(btn) {
 // Make sure to store the on-screen operand in the storedOperands array prior to evaluation of arithmetic (note this is a tentative implementation, and in fact we could avoid adding this to stored and simply utilise the currentOperand variable).
 
 function equals() {
-    screenTop.textContent += `${currentOperand} = `;
-    runningResult = operate(currentOperator, runningResult, currentOperand);
-    screenBottom.textContent = runningResult;
-    equalsPressed = true;
+    if(equalsPressed === false) {
+        screenTop.textContent += `${currentOperand} = `;
+        runningResult = operate(currentOperator, runningResult, currentOperand);
+        screenBottom.textContent = runningResult;
+        equalsPressed = true;
+    } else {
+        screenTop.textContent = `${runningResult} ${currentOperator} ${currentOperand} = `;
+        runningResult = operate(currentOperator, runningResult, currentOperand);
+        screenBottom.textContent = runningResult;
+    }
+    
 }
 
 equalsBtn.addEventListener("click", equals);
