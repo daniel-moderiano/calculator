@@ -1,6 +1,8 @@
-
+// TODO: handle equals press on calculator load and following C press (currently undefined leading to NaN results on operations)
 // TODO: handle decimal input 
 // TODO: add keyboard functionality
+// TODO: implement back button
+// TODO: add symbols for multiply and divide with appropriate functionality
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -145,8 +147,13 @@ function undefinedOperatorEquals() {
 }
 
 function equals() {
-    if(currentOperator === undefined) {
+    if(currentOperand === undefined && currentOperator === undefined) {
+        currentOperand = 0;
+        runningResult = parseInt(screenBottom.textContent)
+        screenTop.textContent = `${currentOperand} = `
+    } else if(currentOperator === undefined) {
         screenTop.textContent = `${currentOperand} = `;
+        runningResult = parseInt(screenBottom.textContent)
     } else if(currentOperand === undefined) {
         currentOperand = parseInt(screenBottom.textContent);
         runningResult = operate(currentOperator, runningResult, currentOperand);
