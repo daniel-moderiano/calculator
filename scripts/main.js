@@ -1,6 +1,6 @@
 // TODO: handle decimal input 
-// TODO: add keyboard functionality
 // TODO: add symbols for multiply and divide with appropriate functionality
+// TODO: handle overflow for user inputted values > length 20 ish
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -12,7 +12,7 @@ const operatorFunctions = {
     "-" : function(a, b) {
         return a - b;
     },
-    'x' : function(a, b) {
+    '*' : function(a, b) {
         return a * b;
     },
     "/" : function(a, b) {
@@ -32,7 +32,7 @@ function operate(operand, a, b) {
 // Initialise/declare all relevant document variables
 
 const numberString = "0123456789";
-const operatorString = "+-/x"
+const operatorString = "+-/*"
 const numButtons = document.querySelectorAll(".button--num");
 const screenBottom = document.querySelector(".screen__content--bottom");
 const screenTop = document.querySelector(".screen__content--top");
@@ -65,7 +65,6 @@ function overflowHandling() {
         }
     }
 }
-
 
 // Add event listener to numbered buttons to update screen with textContent equal to the button value
 
@@ -100,7 +99,7 @@ clearBtn.addEventListener("click", () => {
     resetTextSize();
 });
 
-// On click of an operator (+, -, x, /), store the current screen content as the current operand variable, and store the selected operator as the current operator variable. Display operand and operator in dim grey screen top
+// On click of an operator +, -, *, /, store the current screen content as the current operand variable, and store the selected operator as the current operator variable. Display operand and operator in dim grey screen top
 
 operatorButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
@@ -136,13 +135,7 @@ function operatorClick(btn) {
     }
 }
 
-// addBtn.addEventListener("click", addition);
-
-// Make sure to store the on-screen operand in the storedOperands array prior to evaluation of arithmetic (note this is a tentative implementation, and in fact we could avoid adding this to stored and simply utilise the currentOperand variable).
-
-function undefinedOperatorEquals() {
-    
-}
+// Equals function
 
 function equals() {
     if(currentOperand === undefined && currentOperator === undefined) {
@@ -180,7 +173,6 @@ allButtons.forEach(function(btn) {
     btn.addEventListener("click", overflowHandling);
 });
 
-
 // Event listener for back key to remove last digit of currentOperand. Should have no function where there is no current operand, or when equalsPressed = true. 
 
 function backspace() {
@@ -199,40 +191,64 @@ backBtn.addEventListener("click", backspace);
 
 // Keyboard functionality
 
-numButtons.forEach(function(btn) {
-    btn.addEventListener("click", () => {
-        // equalsPressed = false;
-        if(screenBottom.textContent === "0" || currentOperand === undefined) {
-            screenBottom.textContent = btn.textContent;
-        } else if(equalsPressed === true) {
-            currentOperator = undefined;
-            currentOperand = undefined;
-            screenTop.textContent = ""
-            screenBottom.textContent = btn.textContent;
-        } else {
-            screenBottom.textContent += btn.textContent; 
-        }
-        currentOperand = parseInt(screenBottom.textContent);
-        equalsPressed = false;
-    });
-});
+function keyNumButton(key) {
+    if(screenBottom.textContent === "0" || currentOperand === undefined) {
+        screenBottom.textContent = key;
+    } else if(equalsPressed === true) {
+        currentOperator = undefined;
+        currentOperand = undefined;
+        screenTop.textContent = ""
+        screenBottom.textContent = key;
+    } else {
+        screenBottom.textContent += key; 
+    }
+    currentOperand = parseInt(screenBottom.textContent);
+    equalsPressed = false;
+}
+    
 
-// Equals function can be called directly.
-// Backspace function can be called directly. 
-// No keyboard functionality for clear
+function operatorClick(key) {
+    if(equalsPressed === true) {
+        currentOperand = undefined;
+        currentOperator = key;
+        screenTop.textContent = `${runningResult} ${currentOperator} `
+    } else {
+        // If this is the first operator then start the runningResult, else simply compute the updated runningResult and update screen displays accordingly. 
+        if(runningResult === undefined) {
+            runningResult = parseInt(screenBottom.textContent);
+        } else {
+            runningResult = operate(currentOperator, runningResult, currentOperand);
+            screenBottom.textContent = runningResult;
+        }
+        currentOperator = key;
+        screenTop.textContent += `${currentOperand} ${currentOperator} `;
+        currentOperand = undefined;
+    }
+}
+
+
 // Operator and number button functions must be altered slightly for keypress, though could be made compatible with the use of "this" keyword?
 
 
 document.addEventListener("keydown", function(event) {
     if(numberString.includes(event.key)) {
-        // New num func here
+        keyNumButton(event.key);
     } else if(operatorString.includes(event.key)) {
-        // New operator func here
-    } else if(event.key === "=") {
+        if(currentOperand === undefined && currentOperator === undefined) {
+            currentOperand = 0;
+            operatorClick(event.key);
+        } else if(currentOperand === undefined) {
+            // pass
+        } else {
+            operatorClick(event.key);
+            equalsPressed = false; 
+        }     
+    } else if(event.key === "=" || event.key === "Enter") {
         equals();
     } else if(event.key === "Backspace") {
         backspace();
     } else {
         // pass
     }
+    overflowHandling();
 });
