@@ -1,4 +1,3 @@
-// TODO: handle equals press on calculator load and following C press (currently undefined leading to NaN results on operations)
 // TODO: handle decimal input 
 // TODO: add keyboard functionality
 // TODO: implement back button
@@ -72,20 +71,19 @@ function overflowHandling() {
 
 numButtons.forEach(function(btn) {
     btn.addEventListener("click", () => {
-        equalsPressed = false;
+        // equalsPressed = false;
         if(screenBottom.textContent === "0" || currentOperand === undefined) {
             screenBottom.textContent = btn.textContent;
-        } else if(result != undefined) {
+        } else if(equalsPressed === true) {
             currentOperator = undefined;
             currentOperand = undefined;
-            runningResult = undefined;
-            result = undefined;
             screenTop.textContent = ""
             screenBottom.textContent = btn.textContent;
         } else {
             screenBottom.textContent += btn.textContent; 
         }
         currentOperand = parseInt(screenBottom.textContent);
+        equalsPressed = false;
     });
 });
 
