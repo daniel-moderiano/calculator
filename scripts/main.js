@@ -42,6 +42,7 @@ const addBtn = document.querySelector(".button--add");
 const equalsBtn = document.querySelector(".button--equals");
 const operatorButtons = document.querySelectorAll(".button--operator");
 const allButtons = document.querySelectorAll("button");
+const backBtn = document.querySelector(".button--back");
 
 let currentOperand;
 let currentOperator;
@@ -180,3 +181,16 @@ allButtons.forEach(function(btn) {
     btn.addEventListener("click", overflowHandling);
 });
 
+
+// Event listener for back key to remove last digit of currentOperand. Should have no function where there is no current operand, or when equalsPressed = true. 
+
+backBtn.addEventListener("click", () => {
+    if(equalsPressed === false && currentOperand != undefined) {
+        if((currentOperand).toString().length > 1) {
+            currentOperand = parseInt((currentOperand.toString().slice(0, -1)));
+        } else {
+            currentOperand = 0;
+        }
+        screenBottom.textContent = currentOperand;  
+    }
+});
