@@ -1,6 +1,7 @@
 // TODO: handle decimal input 
 // TODO: add symbols for multiply and divide with appropriate functionality
-// TODO: handle overflow for user inputted values > length 20 ish
+// TODO: handle overflow for screen top
+
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -69,26 +70,29 @@ function overflowHandling() {
 // Add event listener to numbered buttons to update screen with textContent equal to the button value
 
 numButtons.forEach(function(btn) {
-    btn.addEventListener("click", () => {
-        // equalsPressed = false;
-        if(screenBottom.textContent === "0" || currentOperand === undefined) {
-            screenBottom.textContent = btn.textContent;
-        } else if(equalsPressed === true) {
-            currentOperator = undefined;
-            currentOperand = undefined;
-            screenTop.textContent = ""
-            screenBottom.textContent = btn.textContent;
+    btn.addEventListener("mousedown", () => {
+        if(screenBottom.textContent.length > 20) {
+            // pass
         } else {
-            screenBottom.textContent += btn.textContent; 
-        }
-        currentOperand = parseInt(screenBottom.textContent);
-        equalsPressed = false;
+            if(screenBottom.textContent === "0" || currentOperand === undefined) {
+                screenBottom.textContent = btn.textContent;
+            } else if(equalsPressed === true) {
+                currentOperator = undefined;
+                currentOperand = undefined;
+                screenTop.textContent = ""
+                screenBottom.textContent = btn.textContent;
+            } else {
+                screenBottom.textContent += btn.textContent; 
+            }
+            currentOperand = parseInt(screenBottom.textContent);
+            equalsPressed = false;
+        } 
     });
 });
 
 // Reset screen content to zero (initial state) on click of "C" button
 
-clearBtn.addEventListener("click", () => {
+clearBtn.addEventListener("mousedown", () => {
     resetTextSize();
     screenBottom.textContent = "0";
     screenTop.textContent = ""
@@ -102,7 +106,7 @@ clearBtn.addEventListener("click", () => {
 // On click of an operator +, -, *, /, store the current screen content as the current operand variable, and store the selected operator as the current operator variable. Display operand and operator in dim grey screen top
 
 operatorButtons.forEach(function(btn) {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("mousedown", () => {
         if(currentOperand === undefined && currentOperator === undefined) {
             currentOperand = 0;
             operatorClick(btn);
@@ -165,12 +169,12 @@ function equals() {
     equalsPressed = true; 
 }
 
-equalsBtn.addEventListener("click", equals);
+equalsBtn.addEventListener("mousedown", equals);
 
 // General function to address large numbers
 
 allButtons.forEach(function(btn) {
-    btn.addEventListener("click", overflowHandling);
+    btn.addEventListener("mousedown", overflowHandling);
 });
 
 // Event listener for back key to remove last digit of currentOperand. Should have no function where there is no current operand, or when equalsPressed = true. 
@@ -189,7 +193,7 @@ function backspace() {
     }
 }
 
-backBtn.addEventListener("click", backspace);
+backBtn.addEventListener("mousedown", backspace);
 
 
 // Keyboard functionality
@@ -235,7 +239,11 @@ function operatorKeyClick(key) {
 
 document.addEventListener("keydown", function(event) {
     if(numberString.includes(event.key)) {
-        keyNumButton(event.key);
+        if(screenBottom.textContent.length > 20) {
+            // pass
+        } else {
+            keyNumButton(event.key);
+        }
     } else if(operatorString.includes(event.key)) {
         if(currentOperand === undefined && currentOperator === undefined) {
             currentOperand = 0;
@@ -245,8 +253,9 @@ document.addEventListener("keydown", function(event) {
         } else {
             operatorKeyClick(event.key);
             equalsPressed = false; 
-        }     
-    } else if(event.key === "=" || event.key === "Enter") {
+        }  
+    }   
+    if((event.key === "=" || event.key === "Enter")) {
         equals();
     } else if(event.key === "Backspace") {
         backspace();
