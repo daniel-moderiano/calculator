@@ -1,7 +1,4 @@
 // TODO: handle decimal input 
-// TODO: add symbols for multiply and divide with appropriate functionality
-// TODO: handle overflow for screen top (overflows at 42 characters)
-
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -13,10 +10,10 @@ const operatorFunctions = {
     "-" : function(a, b) {
         return a - b;
     },
-    '*' : function(a, b) {
+    '×' : function(a, b) {
         return a * b;
     },
-    "/" : function(a, b) {
+    "÷" : function(a, b) {
         return a / b;
     }
 };
@@ -24,7 +21,7 @@ const operatorFunctions = {
 // Function operate that accepts 3 parameters: operator, and 2 operands. It then performs the arithmetic using the operands and the operator. 
 
 function operate(operand, a, b) {
-    if(operand === "/" && b === 0) {
+    if(operand === "÷" && b === 0) {
         return "Cannot divide by zero";
     }
     return operatorFunctions[operand](a, b);
@@ -33,7 +30,7 @@ function operate(operand, a, b) {
 // Initialise/declare all relevant document variables
 
 const numberString = "0123456789";
-const operatorString = "+-/*"
+const operatorString = "+-÷×"
 const numButtons = document.querySelectorAll(".button--num");
 const screenBottom = document.querySelector(".screen__content--bottom");
 const screenTop = document.querySelector(".screen__content--top");
@@ -43,6 +40,7 @@ const equalsBtn = document.querySelector(".button--equals");
 const operatorButtons = document.querySelectorAll(".button--operator");
 const allButtons = document.querySelectorAll("button");
 const backBtn = document.querySelector(".button--back");
+const addIcon = document.querySelector(".button__icon--add")
 
 let currentOperand;
 let currentOperator;
@@ -60,12 +58,14 @@ function resetTextSize() {
 }
 
 function overflowHandling() {
+    // The following lengths may need changing once finaly styling is done.
     if(screenBottom.textContent.length >= 12) {
         screenBottom.classList.add("screen__content--shrink");
         if(screenBottom.textContent.length > 20) {
             screenBottom.classList.add("screen__content--extra-shrink");
         }
     }
+    // 148 characters accounts for 3 lines of screen top display, this may need to change once final styling is done.
     if(screenTop.textContent.length > 148 || displayOverflow === true) {
         screenTop.textContent = "Display overflow";
         displayOverflow = true;
@@ -129,7 +129,7 @@ function operatorClick(btn) {
     if(equalsPressed === true) {
         currentOperand = undefined;
         currentOperator = btn.textContent;
-        screenTop.textContent = `${runningResult} ${currentOperator} `
+        screenTop.textContent = `${runningResult} ${currentOperator} `;
     } else {
         // If this is the first operator then start the runningResult, else simply compute the updated runningResult and update screen displays accordingly. 
         if(runningResult === undefined) {
@@ -225,7 +225,6 @@ function keyNumButton(key) {
     }
 }
     
-
 function operatorKeyClick(key) {
     if(equalsPressed === true) {
         currentOperand = undefined;
@@ -245,9 +244,7 @@ function operatorKeyClick(key) {
     }
 }
 
-
 // Operator and number button functions must be altered slightly for keypress, though could be made compatible with the use of "this" keyword?
-
 
 document.addEventListener("keydown", function(event) {
     if(numberString.includes(event.key)) {
