@@ -1,6 +1,6 @@
 // TODO: handle decimal input 
 // TODO: add symbols for multiply and divide with appropriate functionality
-// TODO: handle overflow for screen top
+// TODO: handle overflow for screen top (overflows at 42 characters)
 
 
 
@@ -48,6 +48,7 @@ let currentOperand;
 let currentOperator;
 let runningResult;
 let equalsPressed = false;
+let displayOverflow = false;
 
 screenBottom.textContent = "0";
 
@@ -65,13 +66,17 @@ function overflowHandling() {
             screenBottom.classList.add("screen__content--extra-shrink");
         }
     }
+    if(screenTop.textContent.length > 148 || displayOverflow === true) {
+        screenTop.textContent = "Display overflow";
+        displayOverflow = true;
+    }
 }
 
 // Add event listener to numbered buttons to update screen with textContent equal to the button value
 
 numButtons.forEach(function(btn) {
     btn.addEventListener("mousedown", () => {
-        if(screenBottom.textContent.length > 20) {
+        if(screenBottom.textContent.length > 20 && currentOperand != undefined) {
             // pass
         } else {
             if(screenBottom.textContent === "0" || currentOperand === undefined) {
@@ -142,6 +147,7 @@ function operatorClick(btn) {
 // Equals function
 
 function equals() {
+    displayOverflow = false;
     if(currentOperand === undefined && currentOperator === undefined) {
         currentOperand = 0;
         runningResult = parseInt(screenBottom.textContent)
@@ -177,6 +183,8 @@ allButtons.forEach(function(btn) {
     btn.addEventListener("mousedown", overflowHandling);
 });
 
+
+
 // Event listener for back key to remove last digit of currentOperand. Should have no function where there is no current operand, or when equalsPressed = true. 
 
 function backspace() {
@@ -199,18 +207,22 @@ backBtn.addEventListener("mousedown", backspace);
 // Keyboard functionality
 
 function keyNumButton(key) {
-    if(screenBottom.textContent === "0" || currentOperand === undefined) {
-        screenBottom.textContent = key;
-    } else if(equalsPressed === true) {
-        currentOperator = undefined;
-        currentOperand = undefined;
-        screenTop.textContent = ""
-        screenBottom.textContent = key;
+    if(screenBottom.textContent.length > 20 && currentOperand != undefined) {
+        // pass
     } else {
-        screenBottom.textContent += key; 
+        if(screenBottom.textContent === "0" || currentOperand === undefined) {
+            screenBottom.textContent = key;
+        } else if(equalsPressed === true) {
+            currentOperator = undefined;
+            currentOperand = undefined;
+            screenTop.textContent = ""
+            screenBottom.textContent = key;
+        } else {
+            screenBottom.textContent += key; 
+        }
+        currentOperand = parseInt(screenBottom.textContent);
+        equalsPressed = false;
     }
-    currentOperand = parseInt(screenBottom.textContent);
-    equalsPressed = false;
 }
     
 
@@ -239,11 +251,7 @@ function operatorKeyClick(key) {
 
 document.addEventListener("keydown", function(event) {
     if(numberString.includes(event.key)) {
-        if(screenBottom.textContent.length > 20) {
-            // pass
-        } else {
-            keyNumButton(event.key);
-        }
+        keyNumButton(event.key);
     } else if(operatorString.includes(event.key)) {
         if(currentOperand === undefined && currentOperator === undefined) {
             currentOperand = 0;
