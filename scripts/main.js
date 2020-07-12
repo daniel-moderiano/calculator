@@ -129,7 +129,7 @@ function operatorClick(btn) {
             runningResult = operate(currentOperator, runningResult, currentOperand);
             screenBottom.textContent = runningResult;
         }
-        currentOperator = btn.textContent
+        currentOperator = btn.textContent;
         screenTop.textContent += `${currentOperand} ${currentOperator} `;
         currentOperand = undefined;
     }
@@ -177,7 +177,10 @@ allButtons.forEach(function(btn) {
 
 function backspace() {
     if(equalsPressed === false && currentOperand != undefined) {
-        if((currentOperand).toString().length > 1) {
+        if(((currentOperand).toString().length > 1) && ((currentOperand).toString().length <12)) {
+            currentOperand = parseInt((currentOperand.toString().slice(0, -1)));
+            resetTextSize();
+        } else if(((currentOperand).toString().length > 1)) {
             currentOperand = parseInt((currentOperand.toString().slice(0, -1)));
         } else {
             currentOperand = 0;
@@ -207,7 +210,7 @@ function keyNumButton(key) {
 }
     
 
-function operatorClick(key) {
+function operatorKeyClick(key) {
     if(equalsPressed === true) {
         currentOperand = undefined;
         currentOperator = key;
@@ -236,11 +239,11 @@ document.addEventListener("keydown", function(event) {
     } else if(operatorString.includes(event.key)) {
         if(currentOperand === undefined && currentOperator === undefined) {
             currentOperand = 0;
-            operatorClick(event.key);
+            operatorKeyClick(event.key);
         } else if(currentOperand === undefined) {
             // pass
         } else {
-            operatorClick(event.key);
+            operatorKeyClick(event.key);
             equalsPressed = false; 
         }     
     } else if(event.key === "=" || event.key === "Enter") {
