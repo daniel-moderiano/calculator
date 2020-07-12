@@ -1,6 +1,5 @@
 // TODO: handle decimal input 
 // TODO: add keyboard functionality
-// TODO: implement back button
 // TODO: add symbols for multiply and divide with appropriate functionality
 
 
@@ -184,7 +183,7 @@ allButtons.forEach(function(btn) {
 
 // Event listener for back key to remove last digit of currentOperand. Should have no function where there is no current operand, or when equalsPressed = true. 
 
-backBtn.addEventListener("click", () => {
+function backspace() {
     if(equalsPressed === false && currentOperand != undefined) {
         if((currentOperand).toString().length > 1) {
             currentOperand = parseInt((currentOperand.toString().slice(0, -1)));
@@ -192,5 +191,48 @@ backBtn.addEventListener("click", () => {
             currentOperand = 0;
         }
         screenBottom.textContent = currentOperand;  
+    }
+}
+
+backBtn.addEventListener("click", backspace);
+
+
+// Keyboard functionality
+
+numButtons.forEach(function(btn) {
+    btn.addEventListener("click", () => {
+        // equalsPressed = false;
+        if(screenBottom.textContent === "0" || currentOperand === undefined) {
+            screenBottom.textContent = btn.textContent;
+        } else if(equalsPressed === true) {
+            currentOperator = undefined;
+            currentOperand = undefined;
+            screenTop.textContent = ""
+            screenBottom.textContent = btn.textContent;
+        } else {
+            screenBottom.textContent += btn.textContent; 
+        }
+        currentOperand = parseInt(screenBottom.textContent);
+        equalsPressed = false;
+    });
+});
+
+// Equals function can be called directly.
+// Backspace function can be called directly. 
+// No keyboard functionality for clear
+// Operator and number button functions must be altered slightly for keypress, though could be made compatible with the use of "this" keyword?
+
+
+document.addEventListener("keydown", function(event) {
+    if(numberString.includes(event.key)) {
+        // New num func here
+    } else if(operatorString.includes(event.key)) {
+        // New operator func here
+    } else if(event.key === "=") {
+        equals();
+    } else if(event.key === "Backspace") {
+        backspace();
+    } else {
+        // pass
     }
 });
