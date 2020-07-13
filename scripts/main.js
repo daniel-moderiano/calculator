@@ -32,7 +32,6 @@ const numButtons = document.querySelectorAll(".button--num");
 const screenBottom = document.querySelector(".screen__content--bottom");
 const screenTop = document.querySelector(".screen__content--top");
 const clearBtn = document.querySelector(".button--clear");
-const addBtn = document.querySelector(".button--add");
 const equalsBtn = document.querySelector(".button--equals");
 const operatorButtons = document.querySelectorAll(".button--operator");
 const allButtons = document.querySelectorAll("button");
@@ -46,6 +45,29 @@ let equalsPressed = false;
 let displayOverflow = false;
 
 screenBottom.textContent = "0";
+
+// Object that connects keys to their coument objects for class toggles
+
+const keyMap = {
+    "0": document.querySelector(".button--zero"),
+    "1": document.querySelector(".button--one"),
+    "2": document.querySelector(".button--two"),
+    "3": document.querySelector(".button--three"),
+    "4": document.querySelector(".button--four"),
+    "5": document.querySelector(".button--five"),
+    "6": document.querySelector(".button--six"),
+    "7": document.querySelector(".button--seven"),
+    "8": document.querySelector(".button--eight"),
+    "9": document.querySelector(".button--nine"),
+    ".": document.querySelector(".button--decimal"),
+    "=": document.querySelector(".button--equals"),
+    "+": document.querySelector(".button--add"),
+    "-": document.querySelector(".button--subtract"),
+    "*": document.querySelector(".button--multiply"),
+    "/": document.querySelector(".button--divide"),
+    "Backspace": document.querySelector(".button--back"),
+    "Enter": document.querySelector(".button--equals")
+};
 
 // Function to return text size to normal after any kind of shift, and adjust text size for high or low long numbers
 
@@ -279,7 +301,10 @@ function operatorKeyClick(key) {
 
 // Operator and number button functions must be altered slightly for keypress, though could be made compatible with the use of "this" keyword?
 
+// TODO: add class on keydown that includes active, focus, and hover elements, then deactivate on keyup.
+
 document.addEventListener("keydown", function(event) {
+    console.log(event);
     if(numberString.includes(event.key)) {
         keyNumButton(event.key);
     } else if(operatorString.includes(event.key)) {
@@ -301,4 +326,25 @@ document.addEventListener("keydown", function(event) {
         // pass
     }
     overflowHandling();
+});
+
+function keyClassToggle(key) {
+    let targetKey = keyMap[key];
+    if(numberString.includes(key)) {
+        targetKey.classList.toggle("active-numKey");
+    } else if(operatorString.includes(key) || key === "Backspace") {
+        targetKey.classList.toggle("active-operatorKey");
+    } else if(key === "=" || key === "Enter") {
+        targetKey.classList.toggle("active-equalsKey");
+    } 
+}
+
+
+
+document.addEventListener('keydown', function(event) {
+    keyClassToggle(event.key);
+});
+
+document.addEventListener('keyup', function(event) {
+    keyClassToggle(event.key);
 });

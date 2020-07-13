@@ -1,9 +1,9 @@
 body {
     font-family: "Roboto", sans-serif;
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(253, 253, 253);
 }
 
-:focus {
+*:focus:not(.focus-visible) {
     outline: none;
 }
 
@@ -241,4 +241,22 @@ button {
 
 .button--num:active:focus {
     border: 1px solid rgb(180, 180, 180); 
+}
+
+.active-numKey {
+    box-shadow: 0 0 5px rgb(180, 180, 180, 0.8);
+    background-color: rgba(180, 180, 180, 0.4);
+    border: 1px solid rgb(180, 180, 180); 
+}
+
+.active-operatorKey {
+    box-shadow: 0 0 5px rgba(174, 187, 204, 0.9);
+    background-color: rgba(174, 187, 204, 0.8);
+    border: 1px solid rgb(139, 150, 163);
+}
+
+.active-equalsKey {
+    box-shadow: 0 0 5px rgba(0, 132, 255, 0.5);
+    background-color: rgba(0, 132, 255, 0.5);
+    border: 1px solid rgba(53, 104, 151, 0.9);
 }
