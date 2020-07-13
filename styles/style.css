@@ -1,18 +1,33 @@
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: rgb(250, 250, 250);
+}
+
 :focus {
     outline: none;
 }
 
+/* .main-title {
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 2.5rem;
+    font-size: 3rem;
+    color: rgb(116, 116, 116);
+} */
+
 .main-container {
-    height: 500px;
+    height: 516px;
     width: 350px;
     margin: 0 auto;
     margin-top: 3rem;
-    /* border: 1px solid black; */
+    border: 1px solid rgb(215, 215, 215);
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
-    padding: 0.2rem;
-    font-family: "Arial", sans-serif;
-    background-color: rgb(230, 230, 230);
+    padding: 1.5rem;
+    background-color: white;
+    box-shadow: 0 0 10px rgb(210, 210, 210);
 }
 
 .screen-container {
@@ -25,12 +40,15 @@
 }
 
 .screen {
-    /* border: 1px solid gray; */
     width: 350px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: rgb(230, 230, 230);
+    font-family: "Roboto", sans-serif;
+    color: black;
+    border: 1px solid rgb(225, 225, 225);
+    border-radius: 5px;
+    /* margin-bottom: 1rem; */
 }
 
 .screen__display {
@@ -40,11 +58,13 @@
     align-items: center;
     justify-content: flex-end;
     text-align: right;
+    padding-left: 0.5rem;
 }
 
 .screen__content--bottom {
     font-size: 3rem;
-    padding-right: 0.5rem;
+    padding-right: 1rem;
+    /* font-weight: bold; */
 }
 
 .screen__content--shrink {
@@ -58,7 +78,7 @@
 .screen__content--top {
     color: rgb(116, 116, 116);
     font-size: 1rem;
-    padding-right: 0.5rem;
+    padding-right: 1rem;
 }
 
 
@@ -66,7 +86,7 @@
 
     display: grid;
     grid-gap: 0.2rem;
-    
+    margin-top: 0.5rem;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas: "clear back  divide  multiply"
@@ -80,12 +100,8 @@
 button {
     border: none;
     font-size: 1.5rem;
-}
-
-button:hover {
-    box-shadow: 0 0 5px rgb(180, 180, 180);
-    background-color: rgba(180, 180, 180, 0.507);
-    border: 1px solid rgb(180, 180, 180);
+    font-family: "Roboto", sans-serif;
+    border-radius: 5px;
 }
 
 .button--one {
@@ -135,9 +151,13 @@ button:hover {
 }
 
 .button--equals:hover {
-    box-shadow: 0 0 5px rgba(88, 174, 255, 0.9);
-    background-color: rgba(88, 174, 255, 0.9);
-    border: 1px solid rgba(88, 174, 255, 0.9);
+    box-shadow: 0 0 5px rgba(0, 132, 255, 0.5);
+    background-color: rgba(0, 132, 255, 0.5);
+
+}
+
+.button--equals:active:focus {
+    border: 1px solid rgba(53, 104, 151, 0.9);
 }
 
 .button--add {
@@ -148,9 +168,20 @@ button:hover {
     grid-area: "subtract";
 }
 
-.button--backspace {
+.button--back {
     grid-area: back;
+    background-color: rgba(205, 221, 240, 0.8);
 }
+
+.button--back:hover {
+    box-shadow: 0 0 5px rgba(174, 187, 204, 0.9);
+    background-color: rgba(174, 187, 204, 0.8);
+}
+
+.button--back:active:focus {
+    border: 1px solid rgb(132, 141, 151);
+}
+
 
 .button__icon {
     width: 2rem;
@@ -160,6 +191,16 @@ button:hover {
 .button--clear {
     grid-area: clear;
     font-weight: 600;
+    background-color: rgba(205, 221, 240, 0.8);
+}
+
+.button--clear:hover {
+    box-shadow: 0 0 5px rgba(174, 187, 204, 0.9);
+    background-color: rgba(174, 187, 204, 0.8);
+}
+
+.button--clear:active:focus {
+    border: 1px solid rgb(132, 141, 151);
 }
 
 .button--decimal {
@@ -176,11 +217,28 @@ button:hover {
 
 .button--operator {
     font-size: 2rem;
-    font-weight: 100;
-    background-color: rgb(240, 240, 240);
+    background-color: rgba(205, 221, 240, 0.8);
+}
+
+.button--operator:hover {
+    box-shadow: 0 0 5px rgba(174, 187, 204, 0.9);
+    background-color: rgba(174, 187, 204, 0.8);
+}
+
+.button--operator:active:focus {
+    border: 1px solid rgb(139, 150, 163);
 }
 
 .button--num {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(245, 245, 245);
     font-weight: bold;
+}
+
+.button--num:hover {
+    box-shadow: 0 0 5px rgb(180, 180, 180, 0.8);
+    background-color: rgba(180, 180, 180, 0.4);
+}
+
+.button--num:active:focus {
+    border: 1px solid rgb(180, 180, 180); 
 }
