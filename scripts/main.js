@@ -1,4 +1,4 @@
-// TODO: handle decimal input 
+// TODO: handle decimal input, specifically handle decimal input when equalsPressed = true
 
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
@@ -79,18 +79,30 @@ numButtons.forEach(function(btn) {
         if(screenBottom.textContent.length > 20 && currentOperand != undefined) {
             // pass
         } else {
-            if(screenBottom.textContent === "0" || currentOperand === undefined) {
-                screenBottom.textContent = btn.textContent;
-            } else if(equalsPressed === true) {
-                currentOperator = undefined;
-                currentOperand = undefined;
-                screenTop.textContent = ""
-                screenBottom.textContent = btn.textContent;
+            if(btn.textContent === "." && screenBottom.textContent.includes(".")) {
+                // pass
             } else {
-                screenBottom.textContent += btn.textContent; 
-            }
-            currentOperand = parseInt(screenBottom.textContent);
-            equalsPressed = false;
+                if(screenBottom.textContent === "0" || currentOperand === undefined) {
+                    if(btn.textContent === ".") {
+                        screenBottom.textContent = `0${btn.textContent}`;
+                    } else {
+                        screenBottom.textContent = btn.textContent;
+                    }
+                } else if(equalsPressed === true) {
+                    if(btn.textContent === ".") {
+                        screenBottom.textContent = `0${btn.textContent}`;
+                    } else {
+                        screenBottom.textContent = btn.textContent;
+                    }
+                    currentOperator = undefined;
+                    currentOperand = undefined;
+                    screenTop.textContent = ""
+                } else {
+                    screenBottom.textContent += btn.textContent; 
+                }
+                currentOperand = parseFloat(screenBottom.textContent);
+                equalsPressed = false;
+            }  
         } 
     });
 });
@@ -133,7 +145,7 @@ function operatorClick(btn) {
     } else {
         // If this is the first operator then start the runningResult, else simply compute the updated runningResult and update screen displays accordingly. 
         if(runningResult === undefined) {
-            runningResult = parseInt(screenBottom.textContent);
+            runningResult = parseFloat(screenBottom.textContent);
         } else {
             runningResult = operate(currentOperator, runningResult, currentOperand);
             screenBottom.textContent = runningResult;
@@ -150,25 +162,25 @@ function equals() {
     displayOverflow = false;
     if(currentOperand === undefined && currentOperator === undefined) {
         currentOperand = 0;
-        runningResult = parseInt(screenBottom.textContent)
+        runningResult = parseFloat(screenBottom.textContent);
         screenTop.textContent = `${currentOperand} = `
     } else if(currentOperator === undefined) {
         screenTop.textContent = `${currentOperand} = `;
-        runningResult = parseInt(screenBottom.textContent)
+        runningResult = parseFloat(screenBottom.textContent);
     } else if(currentOperand === undefined) {
-        currentOperand = parseInt(screenBottom.textContent);
+        currentOperand = parseFloat(screenBottom.textContent);
         runningResult = operate(currentOperator, runningResult, currentOperand);
         screenBottom.textContent = runningResult;
         screenTop.textContent = `${currentOperand} ${currentOperator} ${currentOperand} = `;   
     } else {
         if(equalsPressed === false) {
             screenTop.textContent += `${currentOperand} = `;
-            runningResult = operate(currentOperator, runningResult, currentOperand);
+            runningResult = (operate(currentOperator, runningResult, currentOperand));
             screenBottom.textContent = runningResult;
        
         } else {
             screenTop.textContent = `${runningResult} ${currentOperator} ${currentOperand} = `;
-            runningResult = operate(currentOperator, runningResult, currentOperand);
+            runningResult = (operate(currentOperator, runningResult, currentOperand));
             screenBottom.textContent = runningResult;
         }   
     }    
@@ -190,10 +202,10 @@ allButtons.forEach(function(btn) {
 function backspace() {
     if(equalsPressed === false && currentOperand != undefined) {
         if(((currentOperand).toString().length > 1) && ((currentOperand).toString().length <12)) {
-            currentOperand = parseInt((currentOperand.toString().slice(0, -1)));
+            currentOperand = parseFloat((currentOperand.toString().slice(0, -1)));
             resetTextSize();
         } else if(((currentOperand).toString().length > 1)) {
-            currentOperand = parseInt((currentOperand.toString().slice(0, -1)));
+            currentOperand = parseFloat((currentOperand.toString().slice(0, -1)));
         } else {
             currentOperand = 0;
         }
@@ -220,7 +232,7 @@ function keyNumButton(key) {
         } else {
             screenBottom.textContent += key; 
         }
-        currentOperand = parseInt(screenBottom.textContent);
+        currentOperand = parseFloat(screenBottom.textContent);
         equalsPressed = false;
     }
 }
@@ -233,9 +245,9 @@ function operatorKeyClick(key) {
     } else {
         // If this is the first operator then start the runningResult, else simply compute the updated runningResult and update screen displays accordingly. 
         if(runningResult === undefined) {
-            runningResult = parseInt(screenBottom.textContent);
+            runningResult = parseFloat(screenBottom.textContent);
         } else {
-            runningResult = operate(currentOperator, runningResult, currentOperand);
+            runningResult = parseFloat(operate(currentOperator, runningResult, currentOperand));
             screenBottom.textContent = runningResult;
         }
         currentOperator = key;
