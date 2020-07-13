@@ -1,5 +1,3 @@
-// TODO: broken keyboard support for divide and multiply with the addition of symbols. Need to revert to previous arrangement with font-size: 0; for text with symbol overlay.
-
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
 
 const operatorFunctions = {
@@ -282,7 +280,6 @@ function operatorKeyClick(key) {
 // Operator and number button functions must be altered slightly for keypress, though could be made compatible with the use of "this" keyword?
 
 document.addEventListener("keydown", function(event) {
-    console.log(event.key);
     if(numberString.includes(event.key)) {
         keyNumButton(event.key);
     } else if(operatorString.includes(event.key)) {
