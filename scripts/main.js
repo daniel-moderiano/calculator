@@ -1,5 +1,4 @@
-// TODO: handle decimal input, specifically handle decimal input when equalsPressed = true
-
+// TODO: broken keyboard support for divide and multiply with the addition of symbols. Need to revert to previous arrangement with font-size: 0; for text with symbol overlay.
 
 // Create object to store the various arithmetic functions to allow them to be easily called using the operate function (trial vs individually creating each function and then calling that, not sure if there is a difference)
 
@@ -29,8 +28,8 @@ function operate(operand, a, b) {
 
 // Initialise/declare all relevant document variables
 
-const numberString = "0123456789";
-const operatorString = "+-÷×"
+const numberString = "0123456789.";
+const operatorString = "+-÷×*/"
 const numButtons = document.querySelectorAll(".button--num");
 const screenBottom = document.querySelector(".screen__content--bottom");
 const screenTop = document.querySelector(".screen__content--top");
@@ -79,7 +78,7 @@ numButtons.forEach(function(btn) {
         if(screenBottom.textContent.length > 20 && currentOperand != undefined) {
             // pass
         } else {
-            if(btn.textContent === "." && screenBottom.textContent.includes(".")) {
+            if(btn.textContent === "." && screenBottom.textContent.includes(".") && currentOperand != undefined) {
                 // pass
             } else {
                 if(screenBottom.textContent === "0" || currentOperand === undefined) {
@@ -222,25 +221,43 @@ function keyNumButton(key) {
     if(screenBottom.textContent.length > 20 && currentOperand != undefined) {
         // pass
     } else {
-        if(screenBottom.textContent === "0" || currentOperand === undefined) {
-            screenBottom.textContent = key;
-        } else if(equalsPressed === true) {
-            currentOperator = undefined;
-            currentOperand = undefined;
-            screenTop.textContent = ""
-            screenBottom.textContent = key;
+        if(key === "." && screenBottom.textContent.includes(".") && currentOperand != undefined) {
+            // pass
         } else {
-            screenBottom.textContent += key; 
-        }
-        currentOperand = parseFloat(screenBottom.textContent);
-        equalsPressed = false;
-    }
+            if(screenBottom.textContent === "0" || currentOperand === undefined) {
+                if(key === ".") {
+                    screenBottom.textContent = `0${key}`;
+                } else {
+                    screenBottom.textContent = key;
+                }
+            } else if(equalsPressed === true) {
+                if(key === ".") {
+                    screenBottom.textContent = `0${key}`;
+                } else {
+                    screenBottom.textContent = key;
+                }
+                currentOperator = undefined;
+                currentOperand = undefined;
+                screenTop.textContent = ""
+            } else {
+                screenBottom.textContent += key; 
+            }
+            currentOperand = parseFloat(screenBottom.textContent);
+            equalsPressed = false;
+        }  
+    } 
 }
     
 function operatorKeyClick(key) {
     if(equalsPressed === true) {
         currentOperand = undefined;
-        currentOperator = key;
+        if(key === "/") {
+            currentOperator = "÷";
+        } else if(key === "*") {
+            currentOperator = "×";
+        } else {
+            currentOperator = key;
+        }
         screenTop.textContent = `${runningResult} ${currentOperator} `
     } else {
         // If this is the first operator then start the runningResult, else simply compute the updated runningResult and update screen displays accordingly. 
@@ -250,7 +267,13 @@ function operatorKeyClick(key) {
             runningResult = parseFloat(operate(currentOperator, runningResult, currentOperand));
             screenBottom.textContent = runningResult;
         }
-        currentOperator = key;
+        if(key === "/") {
+            currentOperator = "÷";
+        } else if(key === "*") {
+            currentOperator = "×";
+        } else {
+            currentOperator = key;
+        }
         screenTop.textContent += `${currentOperand} ${currentOperator} `;
         currentOperand = undefined;
     }
@@ -259,6 +282,7 @@ function operatorKeyClick(key) {
 // Operator and number button functions must be altered slightly for keypress, though could be made compatible with the use of "this" keyword?
 
 document.addEventListener("keydown", function(event) {
+    console.log(event.key);
     if(numberString.includes(event.key)) {
         keyNumButton(event.key);
     } else if(operatorString.includes(event.key)) {
