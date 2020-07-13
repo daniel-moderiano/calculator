@@ -1,3 +1,3 @@
-Calculator project as part of The Odin Project
+Fully functional JavaScript calculator, built as part of the Odin Project curriculum. 
 
-Create a fully functioning on-screen calculator.
+Able to handle basic arithmetic: addition, subtraction, multiplication, and division. Able to handle decimal input. 
