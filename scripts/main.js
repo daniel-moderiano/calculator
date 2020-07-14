@@ -301,10 +301,7 @@ function operatorKeyClick(key) {
 
 // Operator and number button functions must be altered slightly for keypress, though could be made compatible with the use of "this" keyword?
 
-// TODO: add class on keydown that includes active, focus, and hover elements, then deactivate on keyup.
-
 document.addEventListener("keydown", function(event) {
-    console.log(event);
     if(numberString.includes(event.key)) {
         keyNumButton(event.key);
     } else if(operatorString.includes(event.key)) {
